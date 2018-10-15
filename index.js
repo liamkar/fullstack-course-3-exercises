@@ -32,6 +32,17 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
+app.get(`${URL_BASE}persons/:id`, (request, response) => {
+    const id = Number(request.params.id)
+    const person = persons.find(person => person.id === id)
+  
+    if ( person ) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  })
+
 
 app.get('/info', (req, res) => {
     res.send(`<p>puhelinluettelossa ${persons.length} hengen tiedot</p><p>${new Date().toUTCString()}</p>`)
