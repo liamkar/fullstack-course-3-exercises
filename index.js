@@ -53,8 +53,15 @@ app.get(`${URL_BASE}persons`, (req, res) => {
   res.json(persons)
 })
 
-const PORT = 3001
+app.delete(`${URL_BASE}persons/:id`, (request, response) => {
+//app.delete('/notes/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id)
+  
+    response.status(204).end()
+  })
 
+const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
