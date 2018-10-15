@@ -1,4 +1,3 @@
-
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
@@ -16,7 +15,6 @@ let persons  = [
 		number: "040-665756",
 		id: 2
 	},
-
 	{
 		name: "Arto Järvinen",
 		number: "040-8887772",
@@ -46,24 +44,6 @@ app.get(`${URL_BASE}persons`, (req, res) => {
   res.json(persons)
 })
 
-
-
-/*
-function getRandomInt(max) {
-  return Math.floor(Math.random() * Math.floor(max));
-}
-
-console.log(getRandomInt(3));
-*/
-// expected output: 0, 1 or 2
-
-/*
-const generateId = () => {
-  const maxId = notes.length > 0 ? notes.map(n => n.id).sort((a,b) => a - b).reverse()[0] : 1
-  return maxId + 1
-}
-*/
-
 const generateId = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 }
@@ -71,9 +51,16 @@ const generateId = (max) => {
 app.post(`${URL_BASE}persons`, (request, response) => {
   const body = request.body
 
-  if (body.name === undefined) {
-    return response.status(400).json({error: 'name missing'})
+	if (body.name === undefined || body.number === undefined ||
+		body.name.length <= 0 || body.number.length <= 0) {
+    return response.status(400).json({error: 'name or number missing'})
   }
+
+	let personsNumbersAlreadyFound = persons.filter(person => (person.name === body.name || person.number === body.number))
+
+	if (personsNumbersAlreadyFound && personsNumbersAlreadyFound.length > 0) {
+		return response.status(400).json({error: 'name or number already in use'})
+	}
 
   const person = {
     name: body.name,
@@ -87,18 +74,12 @@ app.post(`${URL_BASE}persons`, (request, response) => {
   response.json(person)
 })
 
-
-
 app.delete(`${URL_BASE}persons/:id`, (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
   
     response.status(204).end()
   })
-
-
-
-
 
 app.get('/info', (req, res) => {
     res.send(`<p>puhelinluettelossa ${persons.length} hengen tiedot</p><p>${new Date().toUTCString()}</p>`)
