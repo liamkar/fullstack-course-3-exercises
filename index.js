@@ -3,24 +3,12 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 
-morgan('tiny')
 
-/*
-const logger = (request, response, next) => {
-  console.log('Method:',request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
+morgan.token('dump_res', function (req, res) {
+  return JSON.stringify(req.body)
+})
 
-  
-  next()
-}
-
-app.use(logger)
-*/
-
-app.use(morgan())
-
+app.use(morgan(':method :url :status :dump_res :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.json())
 
