@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/persons/1
+DELETE https://glacial-springs-35388.herokuapp.com/api/persons

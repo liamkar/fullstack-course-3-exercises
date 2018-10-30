@@ -1,7 +1,8 @@
-POST http://localhost:3001/api/persons
+POST https://glacial-springs-35388.herokuapp.com/api/persons
+
 content-type: application/json
 
 {
-    "name":"Toni",
+    "name":"Toni2",
     "number":"43434"
 }
