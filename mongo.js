@@ -6,9 +6,6 @@ const url = 'mongodb://ville:THEPASSU@ds145923.mlab.com:45923/mongoville'
 
 mongoose.connect(url)
 
-//let readParamOne = "TODO1";
-//let readParamTwo = "TODO02";
-
 let readParamOne = process.argv[2]; 
 let readParamTwo = process.argv[3]; 
 

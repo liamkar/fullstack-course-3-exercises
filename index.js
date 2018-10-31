@@ -4,6 +4,8 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
+const PhoneNumber = require('./models/phone_number')
+
 app.use(express.static('build'))
 
 app.use(cors())
@@ -53,7 +55,18 @@ app.get(`${URL_BASE}persons/:id`, (request, response) => {
   })
 
 app.get(`${URL_BASE}persons`, (req, res) => {
-  res.json(persons)
+  //res.json(persons)
+
+  PhoneNumber
+  .find({})
+  .then(result => {
+    result.forEach(phoneNumber => {
+      console.log(phoneNumber)
+    })
+    res.json(result)
+    mongoose.connection.close()
+  })
+
 })
 
 const generateId = (max) => {
