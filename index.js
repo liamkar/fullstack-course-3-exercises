@@ -18,6 +18,7 @@ app.use(morgan(':method :url :status :dump_res :res[content-length] - :response-
 
 app.use(bodyParser.json())
 
+/*
 let persons  = [
 	{
 		name: "Arto Hellas",
@@ -40,18 +41,26 @@ let persons  = [
 		id: 4
 	}
 ]
+*/
 
 const URL_BASE = '/api/'
 
 app.get(`${URL_BASE}persons/:id`, (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
+  const id = request.params.id
+  console.log('id to be used to search for phonenumber:',id)
   
-    if ( person ) {
-      response.json(person)
+   PhoneNumber
+   .findById(id)
+   .then(result => {
+     console.log('phonenumber we found:',result)
+
+   if ( result ) {
+      response.json(PhoneNumber.format(result))
     } else {
       response.status(404).end()
     }
+     mongoose.connection.close()
+   })
   })
 
 app.get(`${URL_BASE}persons`, (req, res) => {
@@ -153,9 +162,15 @@ app.delete(`${URL_BASE}persons/:id`, (request, response) => {
   })
 
 app.get('/info', (req, res) => {
-    res.send(`<p>puhelinluettelossa ${persons.length} hengen tiedot</p><p>${new Date().toUTCString()}</p>`)
-  })
+    PhoneNumber
+    .find({})
+    .then(result => {
 
+      res.send(`<p>puhelinluettelossa ${result.length} hengen tiedot</p><p>${new Date().toUTCString()}</p>`)
+
+      mongoose.connection.close()
+    })
+  })
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
