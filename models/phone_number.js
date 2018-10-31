@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 // korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
-const url = 'mongodb://ville:TETETETETE@ds145923.mlab.com:45923/mongoville'
+const url = 'mongodb://ville:TESTETETE@ds145923.mlab.com:45923/mongoville'
 
 mongoose.connect(url)
 

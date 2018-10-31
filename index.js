@@ -85,23 +85,31 @@ app.post(`${URL_BASE}persons`, (request, response) => {
 		body.name.length <= 0 || body.number.length <= 0) {
     return response.status(400).json({error: 'name or number missing'})
   }
-
-	let personsNumbersAlreadyFound = persons.filter(person => (person.name === body.name || person.number === body.number))
+  
+  /*
+  let personsNumbersAlreadyFound = persons.filter(person => (person.name === body.name || person.number === body.number))
 
 	if (personsNumbersAlreadyFound && personsNumbersAlreadyFound.length > 0) {
 		return response.status(400).json({error: 'name or number already in use'})
 	}
+  */
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: generateId(10000)
-  }
+ const phoneNumber = new PhoneNumber({
+  name: body.name,
+  number: body.number
+})
 
-	console.log('new person:' + person);
-  persons = persons.concat(person)
+  console.log('new person:' + phoneNumber);
 
-  response.json(person)
+  phoneNumber
+    .save()
+    .then(savedPhoneNumber => {
+    response.json(PhoneNumber.format(savedPhoneNumber))
+    .catch(error => {
+      console.log(error)
+    })    
+ })
+
 })
 
 app.delete(`${URL_BASE}persons/:id`, (request, response) => {
