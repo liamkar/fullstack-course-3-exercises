@@ -55,15 +55,20 @@ app.get(`${URL_BASE}persons/:id`, (request, response) => {
   })
 
 app.get(`${URL_BASE}persons`, (req, res) => {
-  //res.json(persons)
-
+  //TODO:should this be refactored to the phone_number.js as well?
   PhoneNumber
   .find({})
   .then(result => {
+    let resultFormatted = []
+
     result.forEach(phoneNumber => {
       console.log(phoneNumber)
+      resultFormatted.push(PhoneNumber.format(phoneNumber))
     })
-    res.json(result)
+
+    console.log('just before trying to format results...')
+
+    res.json(resultFormatted)
     mongoose.connection.close()
   })
 
