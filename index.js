@@ -113,10 +113,23 @@ app.post(`${URL_BASE}persons`, (request, response) => {
 })
 
 app.delete(`${URL_BASE}persons/:id`, (request, response) => {
+  /*
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
   
     response.status(204).end()
+*/
+    PhoneNumber
+    .findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => {
+      response.status(400).send({ error: 'malformatted id' })
+    })
+
+
+
   })
 
 app.get('/info', (req, res) => {
