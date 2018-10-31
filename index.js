@@ -78,8 +78,31 @@ const generateId = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+  app.put(`${URL_BASE}persons/:id`, (request, response) => {
+  
+  const body = request.body
+
+  const phoneNumber = {
+    name: body.name,
+    number: body.number
+  }
+
+  PhoneNumber
+    .findByIdAndUpdate(request.params.id, phoneNumber, { new: true } )
+    .then(updatedPhoneNumber => {
+      response.json(PhoneNumber.format(updatedPhoneNumber))
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'malformatted id' })
+    })
+})
+
+
 app.post(`${URL_BASE}persons`, (request, response) => {
   const body = request.body
+
+  console.log('at post');
 
 	if (body.name === undefined || body.number === undefined ||
 		body.name.length <= 0 || body.number.length <= 0) {
@@ -127,9 +150,6 @@ app.delete(`${URL_BASE}persons/:id`, (request, response) => {
     .catch(error => {
       response.status(400).send({ error: 'malformatted id' })
     })
-
-
-
   })
 
 app.get('/info', (req, res) => {
