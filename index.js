@@ -3,6 +3,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+var assert = require('assert');
 
 const PhoneNumber = require('./models/phone_number')
 
@@ -108,6 +109,87 @@ const generateId = (max) => {
 })
 
 
+
+
+app.post(`${URL_BASE}persons`, (request, response) => {
+  
+  const body = request.body
+
+  console.log('at post');
+
+	if (body.name === undefined || body.number === undefined ||
+		body.name.length <= 0 || body.number.length <= 0) {
+    return response.status(400).json({error: 'name or number missing'})
+  }
+
+ const phoneNumber = new PhoneNumber({
+  name: body.name,
+  number: body.number
+})
+
+/*
+  Person
+  .find({name: nameToBeAdded})
+  .then(result => {
+    // jatka koodia täällä
+  })
+*/
+
+/*
+
+var contact = new aircraftContactModel(postVars.contact);
+contact.save().then(function(){
+    var aircraft = new aircraftModel(postVars.aircraft);
+    return aircraft.save();
+})
+.then(function(){
+    console.log('aircraft saved')
+}).catch(function(){
+    // want to handle errors here
+});
+
+*/
+
+   var query = PhoneNumber.find({name: body.name});
+   assert.ok(!(query instanceof Promise));
+   
+   // A query is not a fully-fledged promise, but it does have a `.then()`.
+   query.then(function (foundPhoneNumber) {
+     // use doc
+     if (foundPhoneNumber.length <= 0) {
+       console.log('no phoneNumber found with the given name yet, SAVE NEW!')
+      return phoneNumber.save();
+    }
+    else {
+      //TODO:should we return something here
+      console.log('trying to save phone number with existing name-  DO NOTHING !')
+      //return phoneNumber.; 
+    }
+   })
+   .then(result => {
+    console.log('code went through without errors')
+    //TODO:pitää closettaa aina manuaalisesti?
+    //TODO:heittääkin tässä kohtaa poikkeuksen - ei jostain syystä täällä tunnista mongoosea...
+    //mongoose.connection.close()
+    if (result === undefined || result.length <= 0) {
+      //TODO: would there be a chance to actually throw error here and catch it later in actual promise?
+      response.status(400).send({ error: 'tried to store duplicate phonenumber' })
+    }
+    else {
+      response.json(PhoneNumber.format(result))
+    }
+  })
+   .catch(error => {
+
+    console.log('ERROR HAPPENED while posting new phonenumber:',error)
+    response.status(400).send({ error: 'malformatted id' })
+  })
+
+
+})
+
+
+/*
 app.post(`${URL_BASE}persons`, (request, response) => {
   const body = request.body
 
@@ -118,13 +200,13 @@ app.post(`${URL_BASE}persons`, (request, response) => {
     return response.status(400).json({error: 'name or number missing'})
   }
   
-  /*
-  let personsNumbersAlreadyFound = persons.filter(person => (person.name === body.name || person.number === body.number))
+  
+  //let personsNumbersAlreadyFound = persons.filter(person => (person.name === body.name || person.number === body.number))
 
-	if (personsNumbersAlreadyFound && personsNumbersAlreadyFound.length > 0) {
-		return response.status(400).json({error: 'name or number already in use'})
-	}
-  */
+	//if (personsNumbersAlreadyFound && personsNumbersAlreadyFound.length > 0) {
+		//return response.status(400).json({error: 'name or number already in use'})
+	//}
+  
 
  const phoneNumber = new PhoneNumber({
   name: body.name,
@@ -142,7 +224,10 @@ app.post(`${URL_BASE}persons`, (request, response) => {
     })    
  })
 
+
 })
+*/
+
 
 app.delete(`${URL_BASE}persons/:id`, (request, response) => {
   /*

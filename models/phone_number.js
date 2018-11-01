@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 // korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
-const url = 'mongodb://ville:TETETET@ds145923.mlab.com:45923/mongoville'
+const url = 'mongodb://ville:TETETETETE@ds145923.mlab.com:45923/mongoville'
 
 mongoose.connect(url)
 
@@ -10,7 +10,6 @@ var PhoneNumberSchema = new Schema({
     name: String,
     number: String
 });
-
 
     PhoneNumberSchema.statics.format = function format (phoneNumber) {
         console.log('at static format method:', this.name, this.number, this._id)
