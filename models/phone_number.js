@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
+
 let Schema = mongoose.Schema
 
 // korvaa url oman tietokantasi urlilla. ethän laita salasanaa Githubiin!
 //const url = 'mongodb://ville:TETETETETE@ds145923.mlab.com:45923/mongoville'
+if ( process.env.NODE_ENV !== 'production' ) {
+    require('dotenv').config()
+  }
 
 const url = process.env.MONGODB_URI
 
