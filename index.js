@@ -109,8 +109,6 @@ const generateId = (max) => {
 })
 
 
-
-
 app.post(`${URL_BASE}persons`, (request, response) => {
   
   const body = request.body
